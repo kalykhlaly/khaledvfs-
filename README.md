@@ -1,0 +1,226 @@
+// ==UserScript==
+// @name         EGYPT IN
+// @namespace    BOT_TOKEN = "8446964340:AAGdAh10bl9POXjBbmag1u1EQX0Y6woJrds"
+// @version      2,9
+// @author       salim
+// @match        https://egypt.blsspainglobal.com/*/blsAppointment/ManageAppointment*
+// @downloadURL  none
+// ==/UserScript==
+    'use strict';
+
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+/*$$ IMAGES LINKS $$ IMAGES LINKS $$*/
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+
+const IMages = [{
+AHMEDABDELFATAH : 'https://i.postimg.cc/j5njTchN/1.jpg',//
+MMMMMMMM : 'https://MMMMMMMM.jpg',//
+MMMMMMMM : 'https://MMMMMMMM.jpg',//
+MMMMMMMM : 'https://MMMMMMMM.jpg',//
+MMMMMMMM : 'https://MMMMMMMM.jpg',//
+MMMMMMMM : 'https://MMMMMMMM.jpg',//
+MMMMMMMM : 'https://MMMMMMMM.jpg',//
+MMMMMMMM : 'https://MMMMMMMM.jpg',//
+MMMMMMMM : 'https://MMMMMMMM.jpg',//
+}];
+
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+/* DON'T TOUTCH ANYTHING $$ DON'T TOUTCH ANYTHING $$ DON'T TOUTCH ANYTHING $$ DON'T TOUTCH ANYTHING */
+/*$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$*/
+
+if(document.querySelector('#progress-percent').textContent == '0%'){
+
+    let EmailVerificationList = document.getElementsByClassName('div-email-code');
+    for (let i = 0; i < EmailVerificationList.length; i++) {
+         EmailVerificationList[i].style = 'display: block;';
+    }
+
+        var slo = '';var ttt;
+for (let i = 1; i <= 10; i++) {
+  const elementId = 'AppointmentDate' + i ;
+  const element = $('#' + elementId);
+  if (element.is(':visible')) {
+slo=elementId;}}
+    var ids = ['AppointmentSlot1', 'AppointmentSlot2', 'AppointmentSlot3', 'AppointmentSlot4', 'AppointmentSlot5'];
+ids.forEach(function(id) {
+    var element = $(".k-widget.k-dropdown.form-control[aria-owns='" + id + "_listbox']");
+  if (element.is(":visible")) {
+    ttt = "AppointmentSlot" + id.slice(15);}});
+
+var modifiedTemplate = function(data) {
+    var html = '<div class="slot-item ';
+    if (data.Count < eval(data.Code)) {
+        html += 'bg-danger" style="border-radius: 8px;padding: 4px 18px 4px 18px;cursor:not-allowed;color:white;">';
+        html += data.Name;} else {
+        html += 'bg-success" style="border-radius: 8px;padding: 4px 18px 4px 18px;cursor:pointer;color:white;">';
+        html += data.Name + ' ' + data.Count;}html += '</div>';return html;};
+
+   $(`#${ttt}`).kendoDropDownList({
+    optionLabel: "--Select--",
+    dataTextField: "Name",
+    dataValueField: "Id",
+    filter: "contains",
+    select: OnSlotSelect,
+    open: OnSlotOpen,
+    template: modifiedTemplate,
+    footerTemplate: ({ instance }) => $("#slot-footer-template").html(),
+    height: 500
+});
+var familyElement = document.querySelector('.card-body');
+
+    var toggleButton = document.createElement('button');
+toggleButton.textContent = 'Category';
+var isToggled = false;
+toggleButton.addEventListener('click', function() {
+  if (isToggled) {$(`li.k-item:contains('Normal')`).click();} else {$(`li.k-item:contains('Premium')`).click();}
+isToggled = !isToggled;
+LoadAppointmentDates(ttt.slice(15),slo.slice(15));});
+toggleButton.style= 'border-radius: 8px; margin-left : 7px;color : red; font-weight:bold ;'
+
+
+let sty ='font-weight:bold ; color:red; margin-left : 7px;'
+var select = document.createElement('select');
+select.id = 'ville-select';
+select.style='border-radius: 6px;cursor: pointer;'
+
+
+
+    var labell = document.createElement('label');
+    var dateSelect = document.createElement('input');
+dateSelect.type = 'number';
+dateSelect.id = 'dateSelect';
+dateSelect.style= 'border-radius: 6px;cursor: pointer;'
+dateSelect.style.width = '40px';
+dateSelect.style.marginLeft = '50px';
+dateSelect.min = 0; // spécifier la valeur minimale autorisée
+dateSelect.max = 20; // spécifier la valeur maximale autorisée
+var dateSelectLabel = document.createElement('span');
+labell.id = 'labell';
+dateSelectLabel.style = sty;
+dateSelectLabel.id = 'day';
+dateSelectLabel.textContent = ': Day To Select';
+labell.prepend(dateSelectLabel);
+labell.prepend(dateSelect);
+familyElement.prepend(labell);
+
+    var dateSelectValue = localStorage.getItem('dateSelectValue') || 0;
+dateSelect.addEventListener('change', function() {
+    if($('#dateSelect').val()==0){document.getElementById('day').style.color = 'red';}else{document.getElementById('day').style.color = 'green';}
+  var value = this.value;
+  localStorage.setItem('dateSelectValue', value);});
+if (dateSelectValue) {dateSelect.value = dateSelectValue;}
+if($('#dateSelect').val()!=0){document.getElementById('day').style.color = 'green';}
+
+var options = ['Cairo', 'Alexandria'];
+for (var i = 0; i < options.length; i++) {
+  var option = document.createElement('option');
+  option.value = options[i];
+  option.text = options[i];
+  select.appendChild(option);}
+var ville = localStorage.getItem('ville') || 'Cairo';
+select.value = ville;
+select.addEventListener('change', function() {
+  ville = this.value;
+  localStorage.setItem('ville', ville);
+    $(`li.k-item:contains(${ville})`).click();
+LoadAppointmentDates(ttt.slice(15),slo.slice(15));});
+
+var titleElement = document.querySelector('#appointmentDetailsDiv .card-header-title');
+var linkElement = document.createElement('a');
+linkElement.href = 'htt'+'ps://t'+'.me/S'+
+'ay'+'ed'+'s'+"alim0";linkElement.style.color = "red";
+linkElement.textContent = 'Script updated B'+'Y'+
+' EL-S'+'ayed S'+'a'
++'li'+'m';titleElement.innerHTML = '';
+titleElement.appendChild(linkElement);
+    var checkboxxx = document.createElement('input');
+checkboxxx.type = 'checkbox';
+var autoEnabledd = localStorage.getItem('autoEnabledd') === 'true';
+checkboxxx.checked = autoEnabledd;
+checkboxxx.addEventListener('change', function() {
+  autoEnabledd = this.checked;
+  localStorage.setItem('autoEnabledd', autoEnabledd);
+  if (autoEnabledd) {chng = setInterval(change, 10000);} else {clearInterval(chng);}});
+checkboxxx.style.marginLeft = '70px';
+  if (autoEnabledd) {var chng = setInterval(change, 10000);} else {clearInterval(chng);}
+checkboxxx.style.cursor= 'pointer';
+checkboxxx.title= 'Auto Change Appointment Category';
+
+    function change() {LoadAppointmentDates(ttt.slice(15),slo.slice(15));}
+
+var label = document.createElement('label');
+var auto = localStorage.getItem('auto') === 'true';
+var checkboxWrapper = document.createElement('div');
+familyElement.prepend(label);
+familyElement.prepend(toggleButton);
+familyElement.prepend(checkboxxx);
+familyElement.prepend(select);
+var day = localStorage.getItem('dateSelectValue')-1;
+
+
+var dddd = setInterval(check, 500);
+var cou = 0;var cc = 0;
+
+    function check() {unsafeWindow.ShowCommonModal = undefined;
+    $(".preloader").remove();
+    $('#global-overlay').hide();
+    $(document).ready(function () {OnUserConsentAccept();})
+    $('#scamAlert').remove();
+            if ($('#DateCss').length != 0) {
+                var all = document.getElementById('DateCss').textContent;
+
+            if (all.includes('success')) {
+                            var Ville =  document.querySelector('#LocationId-list .k-state-selected').textContent;
+                            var typ =  document.querySelector('.k-list-scroller .k-state-selected').textContent;
+                              document.querySelector(`#${slo}`).style.backgroundColor = '#44c611';
+                              document.querySelector(`#${slo}`).placeholder = 'Rendez-vous Disponible';
+                var MsgTxt = new SpeechSynthesisUtterance((` ${ville} ${typ} Disponible. `).repeat(3));
+                window.speechSynthesis.speak(MsgTxt);
+
+clearInterval(dddd);
+                if(localStorage.getItem('dateSelectValue') != 0){choose();}
+			} else {
+                              document.querySelector(`#${slo}`).style.backgroundColor = '#f14242';
+                              document.querySelector(`#${slo}`).placeholder = 'By SayedSalim';
+                if (document.getElementById('DateCss').textContent == '\n' )
+                                     {document.querySelector(`#${slo}`).style.backgroundColor = '#0d59de';}
+}}}
+
+function choose() {
+
+var timm = setInterval(sss, 300);
+var tim = setInterval(ss, 100);
+    function sss() {
+$(`#${slo}`).click()
+                var all = document.getElementById('DateCss').textContent;
+                var dd = all.indexOf("{background-color: var(--bs-success)");
+                var touii = all.slice(0, dd);
+                const regex = /data-value="(\d{4}\/\d{1,2}\/\d{1,2})"/g;
+                var libre = [];let match;
+                while (match = regex.exec(touii)) {libre.push(match[1]);}
+if($(`.k-calendar-view a[data-value="${libre[day]}"]`).length < 1 ){
+$(".k-icon.k-i-arrow-60-right").click();$(`.k-calendar-view a[data-value="${libre[5]}"]`).click();
+}else{$(`.k-calendar-view a[data-value="${libre[day]}"]`).click();}}
+
+
+                   function ss() {
+               if ($(`#${slo}`).val() !== '') {
+                  clearInterval(timm);
+                  $(`#${ttt}`).click();
+                   if($(".slot-item.bg-success").length >= 1){
+                       clearInterval(tim);
+                  $(".slot-item.bg-success").last().click();
+                   clearInterval(tim);clearInterval(timm);
+                   }
+}}}
+function img() {var imageUrl = "";var linkText = document.querySelector('a.h6').innerText.replace(/\s/g, '');
+for (var i = 0; i < IMages.length; i++) {var obj = IMages[i];
+if (obj.hasOwnProperty(linkText)) {imageUrl = obj[linkText];break;}}const fileInput = document.getElementById('uploadfile-1');
+var xhr = new XMLHttpRequest();xhr.open("GET", imageUrl, true);
+xhr.responseType = "blob";xhr.onload = function () {if (xhr.status === 200) {
+var blob = xhr.response;var fd = new FormData();fd.append('file', blob, "image.jpg");
+$.ajax({url: "/Global/query/UploadProfileImage",type: 'post',data: fd,contentType: false,processData: false,success: function (result) {
+if (result.success) {$("#uploadfile-1-preview").attr("src", "/Global/query/getfile?fileid=" + result.fileId);
+$("#ApplicantPhotoId").val(result.fileId);} else {alert(result.err);}}
+});} else {alert("Failed to retrieve the image from the URL.");
+}};if (imageUrl.length>=1) {xhr.send();}}img()}
